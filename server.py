@@ -16,7 +16,7 @@ def start_server():
     # إنشاء خادم محلي على المنفذ المحدد
     with socketserver.TCPServer(("", PORT), LuxuryHandler) as httpd:
         print(f"|---------------------------------------------------------|")
-        print(f"|  Apex Motors Web Server Started Successfully!          |")
+        print(f"|  Engineer Hossam Ramadan Store — Server Running!        |")
         print(f"|  Active URL: http://localhost:{PORT}                       |")
         print(f"|  Press Ctrl+C inside the terminal to stop the server    |")
         print(f"|---------------------------------------------------------|")
@@ -28,7 +28,7 @@ if __name__ == "__main__":
     server_thread.start()
 
     # فتح المتصفح تلقائياً بعد ثانية واحدة للتأكد من تشغيل الخادم
-    print("Opening your browser to load Apex Motors...")
+    print("Opening browser — Engineer Hossam Ramadan Store...")
     webbrowser.open(f"http://localhost:{PORT}")
 
     # إبقاء البرنامج الرئيسي يعمل لخدمة الطلبات

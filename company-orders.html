@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Engineer Hossam Ramadan — B2B Company Orders, Bulk Purchasing & Purchase Order Management">
+  <title>Company Orders | Engineer Hossam Ramadan</title>
+  <link rel="stylesheet" href="css/store.css">
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header class="header">
+    <div class="header__top">
+      <a href="index.html" class="header__logo">
+        <span class="header__logo-icon">⚙️</span>
+        <div class="header__logo-text">
+          Engineer Hossam Ramadan
+          <span>Precision Engineering Store</span>
+        </div>
+      </a>
+
+      <div class="header__deliver">
+        <span>Deliver to</span>
+        <strong>United States</strong>
+      </div>
+
+      <form class="header__search" role="search">
+        <select class="header__search-cat" aria-label="Search category">
+          <option>All Departments</option>
+        </select>
+        <input type="search" class="header__search-input" placeholder="Search products..." aria-label="Search">
+        <button type="button" class="header__search-btn" aria-label="Search">🔍</button>
+      </form>
+
+      <div class="header__nav-right">
+        <a href="#" class="header__nav-item">
+          <span>Hello, Business</span>
+          <strong>Account</strong>
+        </a>
+        <a href="#" class="header__nav-item">
+          <span>Returns</span>
+          <strong>&amp; Orders</strong>
+        </a>
+        <a href="index.html" class="header__nav-item header__cart">
+          <span class="header__cart-icon">🛒</span>
+          <strong>Store</strong>
+        </a>
+      </div>
+    </div>
+
+    <nav class="subnav" aria-label="Main navigation">
+      <button class="subnav__all">☰ All</button>
+      <a href="index.html" class="subnav__link">Store Home</a>
+      <a href="index.html#products" class="subnav__link">Products</a>
+      <a href="company-orders.html" class="subnav__link active">Company Orders</a>
+      <a href="#" class="subnav__link">Bulk Pricing</a>
+      <a href="#" class="subnav__link">Net 30 Terms</a>
+      <a href="#" class="subnav__link">Tax Exempt</a>
+      <a href="#" class="subnav__link">Dedicated Support</a>
+    </nav>
+  </header>
+
+  <!-- ===== PAGE HERO ===== -->
+  <section class="page-hero">
+    <h1>Company &amp; B2B Orders</h1>
+    <p>Submit bulk purchase orders, track shipments, and save up to 22% with volume pricing — built for engineering firms and industrial companies.</p>
+  </section>
+
+  <!-- ===== STATS BAR ===== -->
+  <div class="stats-bar">
+    <div class="stat-box">
+      <div class="stat-box__value" id="stat-orders">5</div>
+      <div class="stat-box__label">Active Orders</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-box__value">22%</div>
+      <div class="stat-box__label">Max Volume Discount</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-box__value">Net 30</div>
+      <div class="stat-box__label">Payment Terms Available</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-box__value">24h</div>
+      <div class="stat-box__label">Quote Response Time</div>
+    </div>
+  </div>
+
+  <!-- ===== B2B LAYOUT ===== -->
+  <div class="b2b-layout">
+
+    <!-- Orders table -->
+    <div class="b2b-panel">
+      <h2 class="b2b-panel__title">📋 Purchase Order History</h2>
+      <div class="orders-table-wrap">
+        <table class="orders-table">
+          <thead>
+            <tr>
+              <th>PO Number</th>
+              <th>Company</th>
+              <th>Contact</th>
+              <th>Date</th>
+              <th>Items</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="orders-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Bulk order form -->
+    <div class="b2b-panel">
+      <h2 class="b2b-panel__title">📝 New Bulk Order</h2>
+
+      <!-- Volume pricing tiers -->
+      <div class="pricing-tiers" id="pricing-tiers"></div>
+
+      <form id="bulk-order-form">
+        <div class="form-group">
+          <label for="company-name">Company Name *</label>
+          <input type="text" class="form-control" id="company-name" required placeholder="e.g. Gulf Engineering Corp.">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="contact-name">Contact Person *</label>
+            <input type="text" class="form-control" id="contact-name" required placeholder="Full name">
+          </div>
+          <div class="form-group">
+            <label for="contact-email">Business Email *</label>
+            <input type="email" class="form-control" id="contact-email" required placeholder="name@company.com">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="po-number">PO Number</label>
+            <input type="text" class="form-control" id="po-number" placeholder="Optional internal PO #">
+          </div>
+          <div class="form-group">
+            <label for="contact-phone">Phone</label>
+            <input type="tel" class="form-control" id="contact-phone" placeholder="+1 (555) 000-0000">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Products</label>
+          <div id="bulk-items"></div>
+          <button type="button" class="btn-add-row" id="add-item-btn">+ Add another product</button>
+        </div>
+
+        <div class="form-group">
+          <label for="order-notes">Special Instructions</label>
+          <textarea class="form-control" id="order-notes" rows="3" placeholder="Delivery address, tax exempt ID, urgency notes..."></textarea>
+        </div>
+
+        <div class="order-summary">
+          <div class="order-summary__row">
+            <span>Subtotal</span>
+            <span id="summary-subtotal">$0.00</span>
+          </div>
+          <div class="order-summary__row">
+            <span>Volume Discount (<span id="summary-tier">Standard</span>)</span>
+            <span class="order-summary__discount" id="summary-discount">$0.00</span>
+          </div>
+          <div class="order-summary__row order-summary__row--total">
+            <span>Estimated Total</span>
+            <span id="summary-total">$0.00</span>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit-order" style="margin-top:16px;">Submit Purchase Order</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Contact info panel -->
+  <div class="container" style="padding-bottom:40px;">
+    <div class="b2b-panel" style="max-width:800px;margin:0 auto;text-align:center;">
+      <h2 class="b2b-panel__title" style="border:none;">Dedicated B2B Support</h2>
+      <p style="color:var(--amz-text-muted);margin-bottom:16px;">Our engineering sales team is ready to assist with quotes, custom specifications, and net payment terms.</p>
+      <p><strong>Email:</strong> <a href="mailto:b2b@hossamramadan.com">b2b@hossamramadan.com</a></p>
+      <p style="margin-top:8px;"><strong>Phone:</strong> +1 (555) 012-3456</p>
+      <p style="margin-top:8px;color:var(--amz-text-muted);font-size:13px;">1200 Engineering Blvd, Suite 400, Houston, TX 77002</p>
+    </div>
+  </div>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="footer__back"><a href="#">Back to top</a></div>
+    <div class="footer__grid">
+      <div class="footer__col">
+        <h4>B2B Services</h4>
+        <a href="#">Volume Pricing</a>
+        <a href="#">Net 30 / Net 60 Terms</a>
+        <a href="#">Tax Exempt Registration</a>
+        <a href="#">Dedicated Account Manager</a>
+      </div>
+      <div class="footer__col">
+        <h4>Order Management</h4>
+        <a href="#">Track Shipment</a>
+        <a href="#">Return Policy</a>
+        <a href="#">Invoice History</a>
+        <a href="#">Reorder</a>
+      </div>
+      <div class="footer__col">
+        <h4>Resources</h4>
+        <a href="#">Product Spec Sheets</a>
+        <a href="#">Calibration Certificates</a>
+        <a href="#">Compliance Documents</a>
+        <a href="#">API Integration</a>
+      </div>
+      <div class="footer__col">
+        <h4>Contact</h4>
+        <a href="index.html">Back to Store</a>
+        <a href="mailto:b2b@hossamramadan.com">b2b@hossamramadan.com</a>
+        <a href="tel:+15550123456">+1 (555) 012-3456</a>
+        <a href="#">Live Chat</a>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <div class="footer__brand">⚙️ Engineer Hossam Ramadan</div>
+      <p>Precision Engineering Supplies &amp; Industrial Solutions</p>
+      <p style="margin-top:8px;">© 2026 Engineer Hossam Ramadan. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/orders-page.js"></script>
+</body>
+</html>
