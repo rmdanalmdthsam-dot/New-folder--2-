@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apex Motors | معرض السيارات العالمي الفاخر</title>
+    
+    <!-- Meta tags SEO -->
+    <meta name="description" content="تصفح واشترِ أرقى وأسرع السيارات الخارقة والكهربائية عالمياً. خدمات تمويل متميزة، فروع متعددة في كبرى العواصم، ومساعد ذكاء اصطناعي مخصص.">
+    <meta name="keywords" content="سيارات خارقة, سيارات فاخرة, لامبورغيني, بوجاتي, بورشه, تمويل سيارات, معرض سيارات عالمي, شراء سيارات, تقسيط سيارات">
+    <meta name="author" content="Apex Motors">
+    
+    <!-- Leaflet.js CSS for Interactive Maps -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    
+    <!-- FontAwesome for Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Style Sheets -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- الهيدر وشريط التنقل -->
+    <header id="main-header">
+        <div class="nav-container">
+            <a href="#" class="logo" id="logo-btn">
+                <i class="fa-solid fa-crown"></i> APEX <span>MOTORS</span>
+            </a>
+            
+            <ul class="nav-menu">
+                <li><a href="#" class="nav-link active" data-page="home">الرئيسية</a></li>
+                <li><a href="#" class="nav-link" data-page="showroom">السيارات</a></li>
+                <li><a href="#" class="nav-link" data-page="compare">المقارنة الذكية</a></li>
+                <li><a href="#" class="nav-link" data-page="financing">التمويل والتقسيط</a></li>
+                <li><a href="#" class="nav-link" data-page="branches">الفروع والخريطة</a></li>
+                <li><a href="#" class="nav-link" data-page="blog">المدونة والأخبار</a></li>
+            </ul>
+            
+            <div class="nav-actions">
+                <button class="btn-luxury" id="auth-btn">
+                    <i class="fa-solid fa-user-tie"></i> <span id="auth-btn-text">تسجيل الدخول</span>
+                </button>
+                <button class="btn-luxury-solid" id="admin-panel-btn" style="display: none;">
+                    <i class="fa-solid fa-gauge-high"></i> لوحة الإدارة
+                </button>
+                <div class="menu-toggle" id="mobile-menu-btn">
+                    <i class="fa-solid fa-bars"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- محتوى الصفحات - نظام SPA التفاعلي -->
+    <main id="main-content" style="margin-top: 80px;">
+
+        <!-- 1. الصفحة الرئيسية -->
+        <div id="page-home" class="spa-page active">
+            <!-- السلايدر الرئيسي البطل -->
+            <section class="hero-section">
+                <!-- فيديو الخلفية عالي الجودة -->
+                <video class="video-background" autoplay loop muted playsinline poster="https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?auto=format&fit=crop&w=1200&q=80">
+                    <source src="https://assets.mixkit.co/videos/preview/mixkit-luxury-black-sport-car-in-a-studio-34537-large.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <div class="hero-overlay"></div>
+                
+                <div class="slider-container" id="hero-slider">
+                    <!-- سيتم تعبئة السلايد المخصص برمجياً -->
+                </div>
+                
+                <button class="slider-arrow arrow-prev" id="slide-prev"><i class="fa-solid fa-chevron-right"></i></button>
+                <button class="slider-arrow arrow-next" id="slide-next"><i class="fa-solid fa-chevron-left"></i></button>
+            </section>
+
+            <!-- شريط البحث السريع والفلترة المتقدمة -->
+            <section style="padding: 0 2rem; position: relative;">
+                <div class="search-panel glass-effect gold-glow">
+                    <h3 style="margin-bottom: 1.5rem; color: var(--color-gold); font-size: 1.25rem;"><i class="fa-solid fa-sliders"></i> ابحث عن سيارتك المثالية</h3>
+                    <div class="search-grid">
+                        <div class="form-group">
+                            <label>الماركة</label>
+                            <select class="form-control" id="search-brand">
+                                <option value="">كل الماركات</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>الموديل (سنة الصنع)</label>
+                            <select class="form-control" id="search-year">
+                                <option value="">كل السنوات</option>
+                                <option value="2026">2026</option>
+                                <option value="2025">2025</option>
+                                <option value="2024">2024</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>نوع الوقود</label>
+                            <select class="form-control" id="search-fuel">
+                                <option value="">كل الأنواع</option>
+                                <option value="بنزين">بنزين</option>
+                                <option value="هجين (Hybrid)">هجين (Hybrid)</option>
+                                <option value="كهربائي">كهربائي</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>الميزانية القصوى ($)</label>
+                            <select class="form-control" id="search-price">
+                                <option value="">بلا حد</option>
+                                <option value="150000">حتى $150,000</option>
+                                <option value="500000">حتى $500,000</option>
+                                <option value="1000000">حتى $1,000,000</option>
+                                <option value="3000000">حتى $3,000,000</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="search-actions">
+                        <button class="btn-luxury" id="search-reset-btn">إعادة تعيين</button>
+                        <button class="btn-luxury-solid" id="search-submit-btn"><i class="fa-solid fa-magnifying-glass"></i> بحث متقدم</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- قسم المبيعات الأكثر تميزاً -->
+            <section>
+                <div class="section-header">
+                    <span class="section-tag">الأعلى طلباً</span>
+                    <h2 class="section-title">السيارات الأكثر مبيعاً ورغبةً</h2>
+                </div>
+                <div class="cars-grid" id="featured-cars-grid">
+                    <!-- سيتم تحميل بطاقات السيارات الفخمة برمجياً -->
+                </div>
+            </section>
+
+            <!-- قسم العروض والخصومات الحصرية والخدمات -->
+            <section class="stats-section">
+                <div class="section-header">
+                    <span class="section-tag">الامتياز والريادة</span>
+                    <h2 class="section-title">إنجازات Apex Motors العالمية</h2>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-item glass-effect">
+                        <div class="stat-icon"><i class="fa-solid fa-globe"></i></div>
+                        <div class="stat-number" data-target="4">0</div>
+                        <div class="stat-label">فروع دولية رئيسية</div>
+                    </div>
+                    <div class="stat-item glass-effect">
+                        <div class="stat-icon"><i class="fa-solid fa-car"></i></div>
+                        <div class="stat-number" data-target="150">0</div>
+                        <div class="stat-label">سيارة تم بيعها وتوصيلها</div>
+                    </div>
+                    <div class="stat-item glass-effect">
+                        <div class="stat-icon"><i class="fa-solid fa-face-smile"></i></div>
+                        <div class="stat-number" data-target="99">0</div>
+                        <div class="stat-label">% نسبة رضا العملاء</div>
+                    </div>
+                    <div class="stat-item glass-effect">
+                        <div class="stat-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                        <div class="stat-number" data-target="5">0</div>
+                        <div class="stat-label">أعوام كفالة حصرية ممتدة</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- قسم أحدث الإضافات مع إمكانية الفلترة السريعة -->
+            <section>
+                <div class="section-header">
+                    <span class="section-tag">أحدث صرعات القوة</span>
+                    <h2 class="section-title">أحدث السيارات المضافة حديثاً</h2>
+                </div>
+                <div class="cars-grid" id="latest-cars-grid">
+                    <!-- يتم تحميل السيارات المضافة حديثاً برمجياً -->
+                </div>
+            </section>
+
+            <!-- قسم آراء العملاء النخبة -->
+            <section>
+                <div class="section-header">
+                    <span class="section-tag">شهادات النخبة</span>
+                    <h2 class="section-title">ماذا يقول عملاؤنا حول العالم؟</h2>
+                </div>
+                <div class="cars-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+                    <div class="pc-card glass-effect" style="border: 1px solid var(--glass-border); padding: 2rem;">
+                        <div style="display: flex; gap: 0.5rem; color: var(--color-gold); margin-bottom: 1rem;">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        </div>
+                        <p style="color: var(--color-text-silver); font-style: italic; line-height: 1.6; font-size: 0.9rem; margin-bottom: 1.5rem;">
+                            "تجربة شراء بورشه GT3 RS من فرع دبي كانت استثنائية بكل المقاييس. الاحترافية والاهتمام بالتفاصيل والشحن الآمن لسيارتي كان مذهلاً. شكراً آبيكس."
+                        </p>
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <div class="user-avatar" style="width: 45px; height: 45px; font-size: 1.1rem; margin:0;"><i class="fa-solid fa-user"></i></div>
+                            <div>
+                                <h5 style="font-weight: 700;">سليمان الراجحي</h5>
+                                <span style="font-size: 0.75rem; color: var(--color-gold);">رائد أعمال - الرياض</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pc-card glass-effect" style="border: 1px solid var(--glass-border); padding: 2rem;">
+                        <div style="display: flex; gap: 0.5rem; color: var(--color-gold); margin-bottom: 1rem;">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        </div>
+                        <p style="color: var(--color-text-silver); font-style: italic; line-height: 1.6; font-size: 0.9rem; margin-bottom: 1.5rem;">
+                            "أول مرة أقوم بحجز سيارة رولز رويس سبكتر عبر الإنترنت بالكامل. ساعدني معالج التمويل الذكي في الحساب، وقمت برفع الأوراق واستلمت سيارتي الفاخرة أمام منزلي."
+                        </p>
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <div class="user-avatar" style="width: 45px; height: 45px; font-size: 1.1rem; margin:0;"><i class="fa-solid fa-user"></i></div>
+                            <div>
+                                <h5 style="font-weight: 700;">Elizabeth Windsor</h5>
+                                <span style="font-size: 0.75rem; color: var(--color-gold);">مستثمرة مالية - لندن</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- العلامات التجارية الشريكة -->
+            <section style="background: rgba(255,255,255,0.01); border-top: 1px solid var(--glass-border);">
+                <div class="section-header" style="margin-bottom: 2rem;">
+                    <span class="section-tag">شراكات عريقة</span>
+                    <h2 class="section-title">العلامات التجارية المعتمدة لدينا</h2>
+                </div>
+                <div style="display: flex; justify-content: center; gap: 4rem; flex-wrap: wrap; align-items: center; opacity: 0.6; padding: 2rem 0;">
+                    <span style="font-family: var(--font-en); font-size: 1.8rem; font-weight: 800; color: white;">BUGATTI</span>
+                    <span style="font-family: var(--font-en); font-size: 1.8rem; font-weight: 800; color: white;">PORSCHE</span>
+                    <span style="font-family: var(--font-en); font-size: 1.8rem; font-weight: 800; color: white;">FERRARI</span>
+                    <span style="font-family: var(--font-en); font-size: 1.8rem; font-weight: 800; color: white;">LAMBORGHINI</span>
+                    <span style="font-family: var(--font-en); font-size: 1.8rem; font-weight: 800; color: white;">ROLLS-ROYCE</span>
+                </div>
+            </section>
+        </div>
+
+        <!-- 2. صالة العرض وقائمة السيارات الكاملة -->
+        <div id="page-showroom" class="spa-page">
+            <section>
+                <div class="section-header">
+                    <span class="section-tag">استكشف الأسطول</span>
+                    <h2 class="section-title">صالة عرض السيارات العالمية</h2>
+                </div>
+                
+                <!-- عرض الفلاتر النشطة والإعدادات -->
+                <div class="search-panel glass-effect" style="margin-bottom: 3rem; margin-top: 0; padding: 1.5rem 2rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                        <div>
+                            <span style="color: var(--color-text-silver); font-size: 0.9rem;">السيارات المتاحة: <strong id="showroom-cars-count" style="color: var(--color-gold);">0</strong> سيارات</span>
+                        </div>
+                        <div style="display: flex; gap: 1rem;">
+                            <input type="text" class="form-control" id="showroom-search-input" placeholder="بحث بالاسم أو الموديل..." style="width: 250px;">
+                            <select class="form-control" id="showroom-sort" style="width: 180px;">
+                                <option value="default">الترتيب الافتراضي</option>
+                                <option value="price-asc">السعر: من الأقل للأعلى</option>
+                                <option value="price-desc">السعر: من الأعلى للأقل</option>
+                                <option value="year-desc">الأحدث صنعاً</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cars-grid" id="showroom-cars-grid">
+                    <!-- سيتم تحميل بطاقات صالة العرض برمجياً -->
+                </div>
+            </section>
+        </div>
+
+        <!-- 3. صفحة تفاصيل السيارة المحددة -->
+        <div id="page-details" class="spa-page">
+            <section style="padding-top: 2rem;">
+                <button class="btn-luxury" id="back-to-showroom-btn" style="margin-bottom: 2rem;"><i class="fa-solid fa-arrow-right"></i> العودة لصالة العرض</button>
+                
+                <div class="details-container" id="car-details-container">
+                    <!-- سيتم تعبئة تفاصيل السيارة ديناميكياً بواسطة جافا سكربت -->
+                </div>
+            </section>
+        </div>
+
+        <!-- 4. صفحة المقارنة الذكية -->
+        <div id="page-compare" class="spa-page">
+            <section>
+                <div class="section-header">
+                    <span class="section-tag">الذكاء الاصطناعي والمواصفات</span>
+                    <h2 class="section-title">مقارنة السيارات الذكية</h2>
+                </div>
+
+                <div class="compare-container">
+                    <div class="compare-selector glass-effect" style="padding: 2rem; border-radius: 8px;">
+                        <div class="form-group">
+                            <label>السيارة الأولى</label>
+                            <select class="form-control" id="compare-select-1">
+                                <option value="">-- اختر السيارة الأولى --</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>السيارة الثانية</label>
+                            <select class="form-control" id="compare-select-2">
+                                <option value="">-- اختر السيارة الثانية --</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="compare-grid glass-effect" id="compare-result-grid" style="display: none;">
+                        <!-- يتم ملء خلايا المقارنة ديناميكياً -->
+                    </div>
+                    
+                    <div id="compare-placeholder" style="text-align: center; padding: 4rem; color: var(--color-text-silver);">
+                        <i class="fa-solid fa-code-compare" style="font-size: 4rem; color: var(--color-gold); margin-bottom: 1.5rem; opacity: 0.5;"></i>
+                        <p>يرجى اختيار سيارتين من القائمة في الأعلى للمقارنة الفورية والمفصلة بين مواصفاتهما ومزاياهما.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- 5. صفحة التمويل والتقسيط -->
+        <div id="page-financing" class="spa-page">
+            <section>
+                <div class="section-header">
+                    <span class="section-tag">الحلول المصرفية الفاخرة</span>
+                    <h2 class="section-title">التمويل والتقسيط المالي</h2>
+                </div>
+
+                <div style="max-width: 900px; margin: 0 auto;" class="glass-effect pc-card">
+                    <h3 style="color: var(--color-gold); margin-bottom: 1.5rem; text-align: center;"><i class="fa-solid fa-file-invoice-dollar"></i> تقديم طلب تمويل معتمد</h3>
+                    <form id="finance-application-form" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                            <div class="form-group">
+                                <label>الاسم الكامل</label>
+                                <input type="text" class="form-control" required placeholder="الاسم ثلاثي">
+                            </div>
+                            <div class="form-group">
+                                <label>رقم الهوية / جواز السفر</label>
+                                <input type="text" class="form-control" required placeholder="مثال: 123-456-789">
+                            </div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                            <div class="form-group">
+                                <label>السيارة المطلوبة</label>
+                                <select class="form-control" id="finance-form-car-select" required>
+                                    <!-- يتم التعبئة تلقائياً -->
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>البنك المفضل</label>
+                                <select class="form-control" required>
+                                    <option value="sabb">البنك السعودي الأول (SABB)</option>
+                                    <option value="emirates-nbd">بنك الإمارات دبي الوطني</option>
+                                    <option value="hsbc">HSBC للخدمات المصرفية الفاخرة</option>
+                                    <option value="chase">JP Morgan Chase Wealth</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 1.5rem;">
+                            <div class="form-group">
+                                <label>الدخل الشهري التقريبي ($)</label>
+                                <input type="number" class="form-control" required placeholder="مثال: 25000">
+                            </div>
+                            <div class="form-group">
+                                <label>الدفعة الأولى المقترحة ($)</label>
+                                <input type="number" class="form-control" required placeholder="مثال: 50000">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>رفع المستندات الثبوتية (تعريف بالراتب / الهوية / كشف الحساب)</label>
+                            <input type="file" class="form-control" style="padding: 0.5rem;" required>
+                            <span style="font-size: 0.75rem; color: var(--color-text-muted);">الملفات المدعومة: PDF, PNG, JPG بحد أقصى 10 ميجابايت</span>
+                        </div>
+                        <button type="submit" class="btn-luxury-solid" style="align-self: center; margin-top: 1rem; width: 250px;">تقديم الطلب إلكترونياً</button>
+                    </form>
+                </div>
+            </section>
+        </div>
+
+        <!-- 6. صفحة الفروع والخرائط التفاعلية -->
+        <div id="page-branches" class="spa-page">
+            <section>
+                <div class="section-header">
+                    <span class="section-tag">الانتشار العالمي</span>
+                    <h2 class="section-title">فروعنا العالمية التفاعلية</h2>
+                </div>
+
+                <div class="branches-container">
+                    <div class="branches-list-panel" id="branches-list-element">
+                        <!-- سيتم تعبئة الفروع ديناميكياً -->
+                    </div>
+                    
+                    <!-- الخريطة التفاعلية -->
+                    <div id="map-element"></div>
+                </div>
+            </section>
+        </div>
+
+        <!-- 7. صفحة المدونة والمقالات -->
+        <div id="page-blog" class="spa-page">
+            <section>
+                <div class="section-header">
+                    <span class="section-tag">ثقافة وفكر رائد</span>
+                    <h2 class="section-title">أحدث مراجعات السيارات وأخبار السوق</h2>
+                </div>
+                
+                <div class="blog-grid" id="blog-articles-grid">
+                    <!-- يتم تعبئة المقالات برمجياً -->
+                </div>
+            </section>
+        </div>
+
+        <!-- 8. لوحة تحكم المستخدم (User Dashboard) -->
+        <div id="page-dashboard" class="spa-page">
+            <section>
+                <div class="dashboard-layout">
+                    <!-- القائمة الجانبية للمستخدم -->
+                    <div class="sidebar-panel glass-effect">
+                        <div class="sidebar-user">
+                            <div class="user-avatar" id="db-user-avatar"><i class="fa-solid fa-user-ninja"></i></div>
+                            <h4 class="user-name" id="db-user-name">عبد الرحمن الفخم</h4>
+                            <span class="user-role">عميل مميز (VIP)</span>
+                        </div>
+                        <ul class="sidebar-menu">
+                            <li><a class="sidebar-link active" data-tab="db-tab-overview"><i class="fa-solid fa-house"></i> نظرة عامة</a></li>
+                            <li><a class="sidebar-link" data-tab="db-tab-favs"><i class="fa-solid fa-heart"></i> المفضلة (<span id="user-favs-count">0</span>)</a></li>
+                            <li><a class="sidebar-link" data-tab="db-tab-orders"><i class="fa-solid fa-clock-rotate-left"></i> طلباتي وحجوزاتي</a></li>
+                            <li><a class="sidebar-link" data-tab="db-tab-sell"><i class="fa-solid fa-car-on"></i> عرض سيارتي للبيع</a></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- المحتوى الرئيسي للوحة تحكم المستخدم -->
+                    <div class="dashboard-main">
+                        <!-- التبويب 1: نظرة عامة -->
+                        <div id="db-tab-overview" class="db-tab active">
+                            <div class="db-stats-grid">
+                                <div class="db-stat-card glass-effect">
+                                    <div class="db-stat-details">
+                                        <h5>المحفوظات</h5>
+                                        <h3 id="db-stat-favs-num">0</h3>
+                                    </div>
+                                    <div class="db-stat-icon"><i class="fa-solid fa-heart"></i></div>
+                                </div>
+                                <div class="db-stat-card glass-effect">
+                                    <div class="db-stat-details">
+                                        <h5>حجوزات نشطة</h5>
+                                        <h3 id="db-stat-orders-num">0</h3>
+                                    </div>
+                                    <div class="db-stat-icon"><i class="fa-solid fa-calendar-check"></i></div>
+                                </div>
+                                <div class="db-stat-card glass-effect">
+                                    <div class="db-stat-details">
+                                        <h5>سيارات للبيع</h5>
+                                        <h3 id="db-stat-usercars-num">0</h3>
+                                    </div>
+                                    <div class="db-stat-icon"><i class="fa-solid fa-car"></i></div>
+                                </div>
+                                <div class="db-stat-card glass-effect">
+                                    <div class="db-stat-details">
+                                        <h5>مستوى العضوية</h5>
+                                        <h3>VIP Elite</h3>
+                                    </div>
+                                    <div class="db-stat-icon"><i class="fa-solid fa-gem"></i></div>
+                                </div>
+                            </div>
+                            
+                            <div class="db-card glass-effect" style="margin-top: 2rem;">
+                                <div class="db-card-header">
+                                    <h4>إشعارات النظام وأحدث التوصيات</h4>
+                                    <i class="fa-solid fa-bell" style="color: var(--color-gold);"></i>
+                                </div>
+                                <div style="display: flex; flex-direction: column; gap: 1rem;" id="dashboard-notifications">
+                                    <div class="spec-list-item" style="border-right: 3px solid var(--color-gold);">
+                                        <div style="flex: 1;">
+                                            <p style="font-size: 0.85rem; font-weight: 700;">مرحباً بك في لوحة تحكم Apex Motors</p>
+                                            <span style="font-size: 0.75rem; color: var(--color-text-silver);">لقد تم تفعيل حسابك كعضو VIP بنجاح. تصفح المعرض الآن لتجربة المقارنة والتمويل الفوري!</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- التبويب 2: المفضلة -->
+                        <div id="db-tab-favs" class="db-tab">
+                            <div class="db-card glass-effect">
+                                <div class="db-card-header">
+                                    <h4>قائمة سياراتك المفضلة</h4>
+                                </div>
+                                <div class="cars-grid" id="db-fav-cars-grid">
+                                    <!-- يتم ملؤها ديناميكياً بالسيارات التي نقر المستخدم على زر القلب لها -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- التبويب 3: الحجوزات والطلبات -->
+                        <div id="db-tab-orders" class="db-tab">
+                            <div class="db-card glass-effect">
+                                <div class="db-card-header">
+                                    <h4>سجل الطلبات وتجارب القيادة وعمليات الشراء</h4>
+                                </div>
+                                <div style="overflow-x: auto; width: 100%;">
+                                    <table style="width: 100%; border-collapse: collapse; text-align: right; font-size: 0.85rem; color: var(--color-text-silver);">
+                                        <thead>
+                                            <tr style="border-bottom: 2px solid var(--glass-border); color: var(--color-gold);">
+                                                <th style="padding: 1rem;">السيارة</th>
+                                                <th style="padding: 1rem;">نوع الطلب</th>
+                                                <th style="padding: 1rem;">التاريخ</th>
+                                                <th style="padding: 1rem;">الحالة</th>
+                                                <th style="padding: 1rem;">التفاصيل</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="db-orders-table-body">
+                                            <!-- حجوزات مضافة -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- التبويب 4: بيع سيارة خاصة بالمستخدم -->
+                        <div id="db-tab-sell" class="db-tab">
+                            <div class="db-card glass-effect">
+                                <div class="db-card-header">
+                                    <h4>اعرض سيارتك للبيع في صالة آبيكس العالمية</h4>
+                                </div>
+                                <p style="font-size: 0.85rem; color: var(--color-text-silver); margin-bottom: 2rem; line-height: 1.6;">
+                                    تتيح لك منصتنا الفاخرة عرض سيارتك للمشترين النخبة والمهتمين حول العالم. سيقوم فريق الإدارة الفني بمراجعة طلبك والتأكد من المستندات والصور قبل تفعيل العرض في المعرض والمزاد الافتراضي.
+                                </p>
+                                <form id="sell-car-form" style="display: flex; flex-direction: column; gap: 1.2rem;">
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem;">
+                                        <div class="form-group">
+                                            <label>الماركة</label>
+                                            <input type="text" class="form-control" id="sell-brand" required placeholder="مثال: Lamborghini">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>الموديل بالكامل</label>
+                                            <input type="text" class="form-control" id="sell-model" required placeholder="مثال: Huracan Sterrato">
+                                        </div>
+                                    </div>
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.2rem;">
+                                        <div class="form-group">
+                                            <label>سنة الصنع</label>
+                                            <input type="number" class="form-control" id="sell-year" required placeholder="مثال: 2024">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>نوع الوقود</label>
+                                            <select class="form-control" id="sell-fuel" required>
+                                                <option value="بنزين">بنزين</option>
+                                                <option value="هجين (Hybrid)">هجين (Hybrid)</option>
+                                                <option value="كهربائي">كهربائي</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>ناقل الحركة</label>
+                                            <input type="text" class="form-control" id="sell-transmission" required placeholder="مثال: أوتوماتيك (Dual Clutch)">
+                                        </div>
+                                    </div>
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.2rem;">
+                                        <div class="form-group">
+                                            <label>السعر المطلوب ($)</label>
+                                            <input type="number" class="form-control" id="sell-price" required placeholder="مثال: 240000">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>المسافة المقطوعة (كم)</label>
+                                            <input type="number" class="form-control" id="sell-mileage" required placeholder="مثال: 2500">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>حالة السيارة</label>
+                                            <select class="form-control" id="sell-condition" required>
+                                                <option value="مستعمل">مستعمل</option>
+                                                <option value="جديد">جديد</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>وصف تفصيلي للسيارة ومواصفاتها الخاصة</label>
+                                        <textarea class="form-control" id="sell-description" rows="4" placeholder="اكتب تفاصيل المحرك، التعديلات، الضمان، إلخ..."></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>رابط صورة للسيارة (أو اتركها ليقوم النظام بتعيين صورة رياضية فاخرة)</label>
+                                        <input type="text" class="form-control" id="sell-image" placeholder="رابط URL كامل للصورة">
+                                    </div>
+                                    <button type="submit" class="btn-luxury-solid" style="width: 250px; align-self: center; margin-top: 1rem;">تقديم السيارة للمراجعة</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- 9. لوحة تحكم الإدارة (Admin Control Panel) -->
+        <div id="page-admin" class="spa-page">
+            <section>
+                <div class="dashboard-layout">
+                    <!-- القائمة الجانبية للوحة الإدارة -->
+                    <div class="sidebar-panel glass-effect">
+                        <div class="sidebar-user">
+                            <div class="user-avatar" style="border-color: var(--color-gold);"><i class="fa-solid fa-user-gear"></i></div>
+                            <h4 class="user-name">الإدارة العليا</h4>
+                            <span class="user-role">مدير النظام الفني</span>
+                        </div>
+                        <ul class="sidebar-menu">
+                            <li><a class="sidebar-link active" data-tab="adm-tab-stats"><i class="fa-solid fa-chart-line"></i> الإحصائيات والأرباح</a></li>
+                            <li><a class="sidebar-link" data-tab="adm-tab-cars"><i class="fa-solid fa-list-check"></i> إدارة السيارات</a></li>
+                            <li><a class="sidebar-link" data-tab="adm-tab-requests"><i class="fa-solid fa-clipboard-list"></i> طلبات المراجعة</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- المحتوى الرئيسي للوحة الإدارة -->
+                    <div class="dashboard-main">
+                        
+                        <!-- تبويب 1: إحصائيات ورسوم بيانية SVG -->
+                        <div id="adm-tab-stats" class="db-tab active">
+                            <div class="db-stats-grid">
+                                <div class="db-stat-card glass-effect">
+                                    <div class="db-stat-details">
+                                        <h5>إجمالي مبيعات المعرض</h5>
+                                        <h3>$8,940,000</h3>
+                                    </div>
+                                    <div class="db-stat-icon" style="color: var(--color-accent-green);"><i class="fa-solid fa-money-bill-trend-up"></i></div>
+                                </div>
+                                <div class="db-stat-card glass-effect">
+                                    <div class="db-stat-details">
+                                        <h5>إجمالي عدد السيارات</h5>
+                                        <h3 id="admin-total-cars-lbl">6</h3>
+                                    </div>
+                                    <div class="db-stat-icon"><i class="fa-solid fa-car"></i></div>
+                                </div>
+                                <div class="db-stat-card glass-effect">
+                                    <div class="db-stat-details">
+                                        <h5>طلبات التمويل المعلقة</h5>
+                                        <h3 id="admin-pending-reqs-lbl">1</h3>
+                                    </div>
+                                    <div class="db-stat-icon" style="color: var(--color-gold);"><i class="fa-solid fa-clock"></i></div>
+                                </div>
+                                <div class="db-stat-card glass-effect">
+                                    <div class="db-stat-details">
+                                        <h5>المشترين المسجلين</h5>
+                                        <h3>240 عميل</h3>
+                                    </div>
+                                    <div class="db-stat-icon"><i class="fa-solid fa-users"></i></div>
+                                </div>
+                            </div>
+
+                            <div class="db-card glass-effect" style="margin-top: 2rem;">
+                                <div class="db-card-header">
+                                    <h4>إحصائيات زيارات واهتمامات العملاء حسب الماركة</h4>
+                                    <span style="font-size: 0.8rem; color: var(--color-text-silver);"><i class="fa-solid fa-chart-bar"></i> عدد المشاهدات الفعلي</span>
+                                </div>
+                                <!-- مخطط بياني SVG تفاعلي -->
+                                <div class="chart-container" id="brand-analytics-chart">
+                                    <div class="chart-bar-wrapper">
+                                        <div class="chart-bar" style="height: 85%;" data-value="12K"></div>
+                                        <span class="chart-label">Lamborghini</span>
+                                    </div>
+                                    <div class="chart-bar-wrapper">
+                                        <div class="chart-bar" style="height: 98%;" data-value="15K"></div>
+                                        <span class="chart-label">Bugatti</span>
+                                    </div>
+                                    <div class="chart-bar-wrapper">
+                                        <div class="chart-bar" style="height: 65%;" data-value="8.2K"></div>
+                                        <span class="chart-label">Porsche</span>
+                                    </div>
+                                    <div class="chart-bar-wrapper">
+                                        <div class="chart-bar" style="height: 78%;" data-value="11K"></div>
+                                        <span class="chart-label">Ferrari</span>
+                                    </div>
+                                    <div class="chart-bar-wrapper">
+                                        <div class="chart-bar" style="height: 45%;" data-value="5.4K"></div>
+                                        <span class="chart-label">Tesla</span>
+                                    </div>
+                                    <div class="chart-bar-wrapper">
+                                        <div class="chart-bar" style="height: 55%;" data-value="6.9K"></div>
+                                        <span class="chart-label">Rolls-Royce</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- تبويب 2: إدارة السيارات (إضافة وتعديل وحذف) -->
+                        <div id="adm-tab-cars" class="db-tab">
+                            <div class="db-card glass-effect">
+                                <div class="db-card-header">
+                                    <h4>أسطول السيارات الحالي بالمعرض</h4>
+                                    <button class="btn-luxury-solid" id="admin-add-car-trigger"><i class="fa-solid fa-plus"></i> إضافة سيارة جديدة</button>
+                                </div>
+                                
+                                <!-- فورمة سريعة منبثقة أو خفية لإضافة سيارة للإدارة -->
+                                <div id="admin-add-car-form-container" class="search-panel" style="display: none; margin-bottom: 2rem; margin-top: 0; background: rgba(7,7,8,0.9); border: 2px solid var(--color-gold);">
+                                    <h4 style="color: var(--color-gold); margin-bottom: 1.5rem;"><i class="fa-solid fa-car-side"></i> نموذج إضافة سيارة خارقة</h4>
+                                    <form id="admin-add-car-form" style="display: flex; flex-direction: column; gap: 1rem;">
+                                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                            <div class="form-group">
+                                                <label>اسم السيارة بالكامل</label>
+                                                <input type="text" class="form-control" id="adm-car-name" required placeholder="مثال: Ferrari SF90 Stradale">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>الماركة</label>
+                                                <input type="text" class="form-control" id="adm-car-brand" required placeholder="Ferrari">
+                                            </div>
+                                        </div>
+                                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                                            <div class="form-group">
+                                                <label>سنة الصنع</label>
+                                                <input type="number" class="form-control" id="adm-car-year" required placeholder="2025">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>السعر ($)</label>
+                                                <input type="number" class="form-control" id="adm-car-price" required placeholder="510000">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>نوع الوقود</label>
+                                                <select class="form-control" id="adm-car-fuel">
+                                                    <option value="بنزين">بنزين</option>
+                                                    <option value="هجين (Hybrid)">هجين (Hybrid)</option>
+                                                    <option value="كهربائي">كهربائي</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                                            <div class="form-group">
+                                                <label>الحالة</label>
+                                                <select class="form-control" id="adm-car-condition">
+                                                    <option value="جديد">جديد</option>
+                                                    <option value="مستعمل">مستعمل</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>ناقل الحركة</label>
+                                                <input type="text" class="form-control" id="adm-car-trans" required placeholder="أوتوماتيك">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>المسافة المقطوعة (كم)</label>
+                                                <input type="number" class="form-control" id="adm-car-mileage" required placeholder="0">
+                                            </div>
+                                        </div>
+                                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                                            <div class="form-group">
+                                                <label>المحرك</label>
+                                                <input type="text" class="form-control" id="adm-car-engine" required placeholder="V8 twin-turbo">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>القوة الحصانية</label>
+                                                <input type="text" class="form-control" id="adm-car-hp" required placeholder="986 حصان">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>السرعة القصوى</label>
+                                                <input type="text" class="form-control" id="adm-car-top" required placeholder="340 كم/س">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>رابط الصورة الفاخرة</label>
+                                            <input type="text" class="form-control" id="adm-car-img" placeholder="URL الصورة">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>الوصف</label>
+                                            <textarea class="form-control" id="adm-car-desc" rows="3" placeholder="تفاصيل السيارة الإضافية"></textarea>
+                                        </div>
+                                        <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                                            <button type="button" class="btn-luxury" id="admin-add-car-cancel">إلغاء</button>
+                                            <button type="submit" class="btn-luxury-solid">إضافة للأسطول</button>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <div style="overflow-x: auto; width: 100%;">
+                                    <table style="width: 100%; border-collapse: collapse; text-align: right; font-size: 0.85rem;">
+                                        <thead>
+                                            <tr style="border-bottom: 2px solid var(--glass-border); color: var(--color-gold);">
+                                                <th style="padding: 1rem;">السيارة</th>
+                                                <th style="padding: 1rem;">الماركة</th>
+                                                <th style="padding: 1rem;">السعر</th>
+                                                <th style="padding: 1rem;">الوقود</th>
+                                                <th style="padding: 1rem;">الحالة</th>
+                                                <th style="padding: 1rem;">العمليات</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="admin-cars-table-body">
+                                            <!-- يتم ملؤها ديناميكياً برمجياً -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- تبويب 3: طلبات المراجعة وبيع المستخدمين ومستندات التمويل -->
+                        <div id="adm-tab-requests" class="db-tab">
+                            <div class="db-card glass-effect">
+                                <div class="db-card-header">
+                                    <h4>طلبات بيع السيارات المرفوعة من العملاء والتمويل</h4>
+                                </div>
+                                <div style="overflow-x: auto; width: 100%;">
+                                    <table style="width: 100%; border-collapse: collapse; text-align: right; font-size: 0.85rem;">
+                                        <thead>
+                                            <tr style="border-bottom: 2px solid var(--glass-border); color: var(--color-gold);">
+                                                <th style="padding: 1rem;">العميل / مقدم الطلب</th>
+                                                <th style="padding: 1rem;">نوع الطلب</th>
+                                                <th style="padding: 1rem;">التفاصيل</th>
+                                                <th style="padding: 1rem;">التاريخ</th>
+                                                <th style="padding: 1rem;">الإجراء</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="admin-requests-table-body">
+                                            <!-- يتم الملء ديناميكياً مع أزرار قبول/رفض تفاعلية -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+    </main>
+
+    <!-- المساعد الذكي العائم (Apex AI chat box) -->
+    <button class="ai-chat-trigger-btn" id="ai-chat-trigger"><i class="fa-solid fa-robot"></i></button>
+    
+    <div class="ai-chat-widget glass-effect gold-glow" id="ai-chat-widget">
+        <div class="ai-chat-header">
+            <div class="ai-chat-title">
+                <i class="fa-solid fa-robot"></i>
+                <div>
+                    <h5 style="color: var(--color-text-white);">Apex AI Copilot</h5>
+                    <span style="font-size: 0.7rem; color: var(--color-accent-green);"><i class="fa-solid fa-circle" style="font-size: 0.5rem;"></i> نشط الآن</span>
+                </div>
+            </div>
+            <div class="ai-chat-close" id="ai-chat-close"><i class="fa-solid fa-xmark"></i></div>
+        </div>
+        
+        <div class="ai-chat-messages" id="ai-chat-messages-container">
+            <div class="chat-msg bot">
+                مرحباً بك في صالة عرض **Apex Motors** العالمية الفاخرة! 🏎️
+                <br><br>
+                أنا مساعدك الذكي الشخصي. يمكنك سؤالي عن أي سيارة في المعرض، وسأقوم بتحليل طلباتك واقتراح الأنسب لميزانيتك.
+                <br><br>
+                يمكنك كتابة رسائل مثل: 
+                - "ما هي أسرع السيارات لديكم؟"
+                - "اقترح سيارة ميزانيتها أقل من 400 ألف دولار"
+                - "أريد سيارة كهربائية فاخرة"
+            </div>
+        </div>
+        
+        <div class="ai-chat-input-area">
+            <input type="text" class="form-control" id="ai-chat-input" placeholder="اسأل مساعد آبيكس الذكي..." style="border-radius: 20px;">
+            <button class="btn-luxury-solid" id="ai-chat-send-btn" style="border-radius: 50%; width: 40px; height: 40px; padding:0; display:flex; align-items:center; justify-content:center;">
+                <i class="fa-solid fa-paper-plane" style="transform: rotate(180deg);"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- نافذة منبثقة لبوابة الدفع الإلكتروني (Simulated Payment Gateway) -->
+    <div class="payment-modal" id="payment-modal">
+        <div class="payment-box glass-effect gold-glow" style="border: 2px solid var(--color-gold);">
+            <div style="position: absolute; left: 20px; top: 20px; cursor: pointer; font-size: 1.5rem; color: var(--color-text-silver);" id="payment-close-btn"><i class="fa-solid fa-xmark"></i></div>
+            <h4 class="payment-title"><i class="fa-solid fa-credit-card"></i> بوابة الدفع الآمنة الفاخرة</h4>
+            <div style="text-align: center; margin-bottom: 1.5rem;">
+                <span style="font-size: 0.95rem; color: var(--color-text-silver);">حجز السيارة: <strong id="payment-car-name" style="color: var(--color-gold);">Car Name</strong></span>
+                <br>
+                <span style="font-size: 0.9rem; color: var(--color-text-silver);">مبلغ الحجز المؤكد أونلاين: <strong id="payment-amount" style="color: var(--color-text-white); font-family: var(--font-en); font-size: 1.2rem;">$5,000</strong></span>
+            </div>
+            
+            <div class="payment-gateways">
+                <div class="pay-gate-btn active" data-gate="card"><i class="fa-solid fa-credit-card"></i><span>فيزا/ماستر</span></div>
+                <div class="pay-gate-btn" data-gate="paypal"><i class="fa-brands fa-paypal"></i><span>PayPal</span></div>
+                <div class="pay-gate-btn" data-gate="apple"><i class="fa-brands fa-apple-pay"></i><span>Apple Pay</span></div>
+            </div>
+            
+            <form id="payment-form" style="display: flex; flex-direction: column; gap: 1rem;">
+                <div id="payment-card-fields">
+                    <div class="form-group" style="margin-bottom: 0.8rem;">
+                        <label>اسم حامل البطاقة</label>
+                        <input type="text" class="form-control" required placeholder="John Doe">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0.8rem;">
+                        <label>رقم البطاقة</label>
+                        <input type="text" class="form-control" required placeholder="4000 1234 5678 9010" maxlength="19">
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label>تاريخ الانتهاء</label>
+                            <input type="text" class="form-control" required placeholder="MM/YY" maxlength="5">
+                        </div>
+                        <div class="form-group">
+                            <label>الرمز السري (CVV)</label>
+                            <input type="password" class="form-control" required placeholder="***" maxlength="3">
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="payment-alternative-fields" style="display: none; text-align: center; padding: 1.5rem 0; color: var(--color-text-silver);">
+                    <i class="fa-solid fa-shield-halved" style="font-size: 2.5rem; color: var(--color-gold); margin-bottom: 1rem;"></i>
+                    <p id="alternative-payment-text">سيتم إعادة توجيهك الآمن لإتمام الدفع بضغطة زر واحدة.</p>
+                </div>
+                
+                <button type="submit" class="btn-luxury-solid" style="margin-top: 1.5rem; width: 100%;"><i class="fa-solid fa-lock"></i> إتمام الدفع والتأكيد الآمن</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- فوتر الموقع الفاخر -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <a href="#" class="logo" style="margin-bottom: 1.5rem;">
+                    <i class="fa-solid fa-crown"></i> APEX <span>MOTORS</span>
+                </a>
+                <p>صالة العرض العالمية الرائدة لسيارات النخبة الخارقة والسيارات الكهربائية المستقبلية. فخامة وأداء وأمان وموثوقية ممتدة عبر القارات.</p>
+                <div class="social-links">
+                    <a href="#" class="social-btn"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" class="social-btn"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a href="#" class="social-btn"><i class="fa-brands fa-youtube"></i></a>
+                    <a href="#" class="social-btn"><i class="fa-brands fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>روابط سريعة</h4>
+                <ul class="footer-links">
+                    <li><a href="#" data-page="home">الرئيسية</a></li>
+                    <li><a href="#" data-page="showroom">صالة العرض</a></li>
+                    <li><a href="#" data-page="compare">المقارنة الذكية</a></li>
+                    <li><a href="#" data-page="financing">التمويل والتقسيط</a></li>
+                    <li><a href="#" data-page="branches">الفروع العالمية</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>الدعم والمبيعات</h4>
+                <ul class="footer-links">
+                    <li><a href="#">احجز تجربة قيادة</a></li>
+                    <li><a href="#">مبيعات كبار الشخصيات</a></li>
+                    <li><a href="#">مراجعة الطلبات المالية</a></li>
+                    <li><a href="#">الأمان وخصوصية البيانات</a></li>
+                    <li><a href="#">شروط الخدمة والاستخدام</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>تواصل معنا</h4>
+                <p style="margin-bottom: 0.8rem;"><i class="fa-solid fa-location-dot" style="color: var(--color-gold); margin-left: 0.5rem;"></i> المقر الرئيسي: دبي، شارع الشيخ زايد</p>
+                <p style="margin-bottom: 0.8rem;"><i class="fa-solid fa-phone" style="color: var(--color-gold); margin-left: 0.5rem;"></i> +971 4 555 0199</p>
+                <p><i class="fa-solid fa-envelope" style="color: var(--color-gold); margin-left: 0.5rem;"></i> sales@apexmotors.global</p>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>جميع الحقوق محفوظة &copy; 2026 لمعرض Apex Motors العالمي الفاخر. تصميم وحماية بمستويات تشفير معززة.</p>
+        </div>
+    </footer>
+
+    <!-- Leaflet.js map logic for maps -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    
+    <!-- JavaScript Application Modules -->
+    <script src="js/data.js"></script>
+    <script src="js/ai.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
